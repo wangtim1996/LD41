@@ -18,7 +18,9 @@ public class ScreenControl : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
+        Bounds b = GetCameraBounds();
         if (Input.GetKeyDown("escape"))
         {
             Cursor.lockState = CursorLockMode.None;
@@ -30,46 +32,61 @@ public class ScreenControl : MonoBehaviour {
             Cursor.lockState = CursorLockMode.Confined;
         }
 
-        if(Input.mousePosition.x < Screen.width * moveSection)
+        if(!(b.min.x < bounds.bounds.min.x && b.max.x <= bounds.bounds.max.x) )
         {
-            //scroll left
-            Camera.main.transform.position -= new Vector3(scrollSpeed, 0, 0) * Time.deltaTime;
+            if (Input.mousePosition.x < Screen.width * moveSection)
+            {
+                //scroll left
+                Camera.main.transform.position -= new Vector3(scrollSpeed, 0, 0) * Time.deltaTime;
+            }
         }
-        else if(Input.mousePosition.x > Screen.width * (1-moveSection))
+        if(!(b.max.x > bounds.bounds.max.x && b.min.x >= bounds.bounds.min.x))
         {
-            //scroll right
-            Camera.main.transform.position += new Vector3(scrollSpeed, 0, 0) * Time.deltaTime;
-        }
-        if (Input.mousePosition.y < Screen.height * moveSection)
-        {
-            //scroll down
-            Camera.main.transform.position -= new Vector3(0, scrollSpeed, 0) * Time.deltaTime;
-        }
-        else if (Input.mousePosition.y > Screen.height * (1 - moveSection))
-        {
-            //scroll up
-            Camera.main.transform.position += new Vector3(0, scrollSpeed, 0) * Time.deltaTime;
-        }
+            if (Input.mousePosition.x > Screen.width * (1 - moveSection))
+            {
+                //scroll right
+                Camera.main.transform.position += new Vector3(scrollSpeed, 0, 0) * Time.deltaTime;
+            }
 
-        Bounds b = GetCameraBounds();
-        if(b.min.x < bounds.bounds.min.x)
-        {
-            Camera.main.transform.position += new Vector3(bounds.bounds.min.x - b.min.x, 0, 0);
         }
-        else if (b.max.x > bounds.bounds.max.x)
+          
+        if(!(b.min.y < bounds.bounds.min.y && b.max.y <= bounds.bounds.max.y))
         {
-            Camera.main.transform.position += new Vector3(bounds.bounds.max.x - b.max.x, 0, 0);
+            if (Input.mousePosition.y < Screen.height * moveSection)
+            {
+                //scroll down
+                Camera.main.transform.position -= new Vector3(0, scrollSpeed, 0) * Time.deltaTime;
+            }
         }
+        if (!(b.max.y > bounds.bounds.max.y && b.min.y >= bounds.bounds.min.y))
+        {
+            if (Input.mousePosition.y > Screen.height * (1 - moveSection))
+            {
+                //scroll up
+                Camera.main.transform.position += new Vector3(0, scrollSpeed, 0) * Time.deltaTime;
+            }
 
-        if (b.min.y < bounds.bounds.min.y)
-        {
-            Camera.main.transform.position += new Vector3(0, bounds.bounds.min.y - b.min.y, 0);
         }
-        else if (b.max.y > bounds.bounds.max.y)
-        {
+        
 
-            Camera.main.transform.position += new Vector3(0, bounds.bounds.max.y - b.max.y, 0);
-        }
+        //if(b.min.x < bounds.bounds.min.x && b.max.x <= bounds.bounds.max.x)
+        //{
+        //    Camera.main.transform.position += new Vector3(bounds.bounds.min.x - b.min.x, 0, 0);
+        //}
+        //else if (b.max.x > bounds.bounds.max.x && b.min.x >= bounds.bounds.min.x)
+        //{
+        //    Camera.main.transform.position += new Vector3(bounds.bounds.max.x - b.max.x, 0, 0);
+        //}
+
+        //if (b.min.y < bounds.bounds.min.y && b.max.y <= bounds.bounds.max.y)
+        //{
+        //    Camera.main.transform.position += new Vector3(0, bounds.bounds.min.y - b.min.y, 0);
+        //}
+        //else if (b.max.y > bounds.bounds.max.y && b.min.y >= bounds.bounds.min.y)
+        //{
+
+        //    Camera.main.transform.position += new Vector3(0, bounds.bounds.max.y - b.max.y, 0);
+        //}
 
 
     }

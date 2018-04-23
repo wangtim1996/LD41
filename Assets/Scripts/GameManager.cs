@@ -191,9 +191,13 @@ public class GameManager : MonoBehaviour
     {
         if(currState == State.GAME)
         {
-            menuScreen.SetActive(false);
-            instructionScreen.SetActive(false);
-            winnerScreen.SetActive(true);
+            if(menuScreen != null)
+            {
+                menuScreen.SetActive(false);
+                instructionScreen.SetActive(false);
+                winnerScreen.SetActive(true);
+
+            }
             if (win)
             {
                 Transform goText = winnerScreen.transform.Find("goText");
