@@ -16,7 +16,7 @@ public class Bullet : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        transform.position += moveDir * speed;
+        transform.position += moveDir * speed * Time.deltaTime * 30 ;
         Bounds b = BulletPoolManager.Instance.mapBounds.bounds;
         if (checkBounds && (transform.position.x < b.min.x || transform.position.x > b.max.x || transform.position.y < b.min.y || transform.position.y > b.max.y))
         {

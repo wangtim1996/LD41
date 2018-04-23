@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BPEightWay : MonoBehaviour {
-
+    private int numBullet = 6;
 	// Use this for initialization
 	void Start () {
 
@@ -19,9 +19,9 @@ public class BPEightWay : MonoBehaviour {
     {
         while(true)
         {
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < numBullet; i++)
             {
-                float angle = i * 2 * Mathf.PI / 8 + Random.Range(0, 0.3f);
+                float angle = i * 2 * Mathf.PI / numBullet + Random.Range(0, 0.3f);
                 Vector3 shotdir = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0);
                 GameObject obj = BulletPoolManager.Instance.enemyPool.GetBullet();
                 if (obj != null)

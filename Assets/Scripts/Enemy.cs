@@ -69,11 +69,11 @@ public class Enemy : MonoBehaviour {
 
         if(aiTimer < 0)
         {
-            aiTimer = aiEightwayTimer;
+            aiTimer = aiEightwayTimer + +Random.Range(0, 1);
             switch (currState)
             {
                 case EnemyState.EIGHTWAY:
-                    TargetRandomShipInRange(15);
+                    TargetRandomShipInRange(30);
                     if(target != null)
                     {
                         Destroy(currPattern);

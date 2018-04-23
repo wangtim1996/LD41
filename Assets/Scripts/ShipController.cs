@@ -125,5 +125,13 @@ public class ShipController : MonoBehaviour {
 
             }
         }
+
+        if(Input.GetButton("Stop"))
+        {
+            foreach (Ship ship in selectedShips)
+            {
+                ship.Stop();
+            }
+        }
 	}
 }

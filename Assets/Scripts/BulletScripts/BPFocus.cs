@@ -20,7 +20,7 @@ public class BPFocus : MonoBehaviour {
         {
             for(int i = 0; i < 3; i++)
             {
-                float angle = -30 + i * 30;
+                float angle = -45 + i * 45;
                 GameObject obj = BulletPoolManager.Instance.enemyPool.GetBullet();
                 if (obj != null)
                 {
@@ -37,7 +37,7 @@ public class BPFocus : MonoBehaviour {
                 }
             }
 
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0.5f);
             
         }
     }

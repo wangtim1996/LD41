@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LaserSnake : MonoBehaviour {
 
@@ -28,7 +29,7 @@ public class LaserSnake : MonoBehaviour {
     private const float AIMTIME = 1;
 
     private const float TARGETTIME = 1;
-    private const float SHOOTTIME = 2;
+    private const float SHOOTTIME = 1.5f;
 
     Vector3 p0;
     Vector3 p1;
@@ -41,6 +42,8 @@ public class LaserSnake : MonoBehaviour {
     private bool dead = false;
 
     public AudioClip segmentDestroySfx;
+    public AudioClip laserTargetSfx;
+    public AudioClip laserShootSfx;
 
     // Use this for initialization
     void Start () {
@@ -170,10 +173,11 @@ public class LaserSnake : MonoBehaviour {
 
     IEnumerator Attack()
     {
-        while(true)
+        yield return new WaitForSeconds(0.5f + Random.Range(0, 0.5f));
+        while (true)
         {
             target = null;
-            while ((target = TargetRandomShipInRange(15)) == null)
+            while ((target = TargetRandomShipInRange(99)) == null)
             {
                 yield return new WaitForSeconds(0.5f);
             }
@@ -183,7 +187,7 @@ public class LaserSnake : MonoBehaviour {
                 //Aim
 
                 p0 = head.transform.position;
-                p1 = p0 + new Vector3(Random.Range(-5f, 5f), Random.Range(-5f, 5f), 0);
+                p1 = transform.parent.position + transform.parent.forward + new Vector3(Random.Range(-5f, 5f), Random.Range(-5f, 5f), 0);
                 q0 = head.transform.rotation;
                 q1 = Quaternion.LookRotation(target.transform.position - p1, Vector3.forward);
                 timeStart = Time.time;
@@ -192,12 +196,14 @@ public class LaserSnake : MonoBehaviour {
 
 
                 //show aim
+                AudioManager.Instance.PlayClip(laserTargetSfx);
                 laserAim.SetActive(true);
                 currState = State.TARGETING;
                 yield return new WaitForSeconds(TARGETTIME);
                 laserAim.SetActive(false);
 
 
+                AudioManager.Instance.PlayClip(laserShootSfx);
                 laserShot.SetActive(true);
                 currState = State.SHOOTING;
                 yield return new WaitForSeconds(SHOOTTIME);
@@ -208,7 +214,7 @@ public class LaserSnake : MonoBehaviour {
 
             }
             //Wiggle-wiggle
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.1f + Random.Range(0, 0.5f));
 
         }
         
@@ -251,5 +257,6 @@ public class LaserSnake : MonoBehaviour {
             Destroy(sg);
             yield return new WaitForSeconds(0.1f);
         }
+        Destroy(transform.parent.gameObject);
     }
 }

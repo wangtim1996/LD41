@@ -7,6 +7,7 @@ public class Ship : MonoBehaviour {
     enum State { IDLE, MOVE, ATTACKMOVE, ATTACKTARGET, EVADE };
 
     public float speed = 0.1f;
+    private float maxSpeed = 1.0f;
 
     private Vector3 moveTarget;
     private Vector3 attackTarget;
@@ -81,7 +82,6 @@ public class Ship : MonoBehaviour {
                 if(target2 != null)
                 {
                     enemyTarget = target2;
-                    Debug.Log("attacking target");
                     Attack(target2.transform.position);
 
                 }
@@ -110,21 +110,29 @@ public class Ship : MonoBehaviour {
 
     public void MoveTo(Vector3 moveTarget)
     {
-        currState = State.MOVE;
+        this.enemyTarget = null;
+        this.attackTarget = moveTarget;
         this.moveTarget = moveTarget;
+        currState = State.MOVE;
     }
 
     public void AttackPos(Vector3 atkTarget)
     {
-        currState = State.ATTACKMOVE;
+
+        this.enemyTarget = null;
         this.attackTarget = atkTarget;
         this.moveTarget = atkTarget;
+        currState = State.ATTACKMOVE;
     }
 
     public void AttackEnemy(GameObject enemy)
     {
         currState = State.ATTACKTARGET;
+        this.attackTarget = enemy.transform.position;
+        this.moveTarget = enemy.transform.position;
         this.enemyTarget = enemy;
+
+        currState = State.ATTACKMOVE;
     }
 
     private GameObject FindClosestEnemyInRange()
@@ -149,7 +157,9 @@ public class Ship : MonoBehaviour {
         if (Vector3.Distance(transform.position, target) > 0.1)
         {
             RotateToward(target);
-            transform.position = Vector3.Lerp(transform.position, target, speed);
+            Vector3 moveTarget = Vector3.Lerp(transform.position, target, speed);
+            Vector3 translation = Vector3.ClampMagnitude(moveTarget - transform.position, maxSpeed);
+            transform.position +=translation;
         }
     }
 
@@ -178,14 +188,11 @@ public class Ship : MonoBehaviour {
                 }
             }
         }
-        else
-        {
-            if(enemyTarget != null)
-            {
-                Move(Vector3.Normalize(enemyTarget.transform.position - transform.position), speed);
+    }
 
-            }
-        }
+    public void Stop()
+    {
+        AttackPos(transform.position);
     }
 
     public void Select()
@@ -209,5 +216,10 @@ public class Ship : MonoBehaviour {
         }
         transform.rotation = Quaternion.Euler(0, 0, angle * 180 / Mathf.PI + offset);
 
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.Instance.ShipDestroyed();
     }
 }

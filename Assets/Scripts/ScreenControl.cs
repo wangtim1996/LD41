@@ -81,4 +81,5 @@ public class ScreenControl : MonoBehaviour {
         Bounds b = new Bounds(Camera.main.transform.position, new Vector3(camHeight * aspectRatio, camHeight, 0));
         return b;
     }
+    
 }

@@ -33,4 +33,12 @@ public class BulletPool : MonoBehaviour {
 
         return null;
     }
+    public void ClearAll()
+    {
+        for (int i = 0; i < poolSize; i++)
+        {
+            bulletList[i].SetActive(false);
+
+        }
+    }
 }
